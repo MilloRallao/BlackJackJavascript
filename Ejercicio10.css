@@ -1,0 +1,143 @@
+/* Cuerpo central */
+#wrapper {
+    margin: 0 auto;
+    width: 1000px;
+}
+
+/* Tapete de juego */
+#game {
+    background: transparent url('https://www.clowerweb.com/cors/blackjack/table.png') 0 0 no-repeat;
+    border-radius: 5px;
+    color: #333;
+    font: 14px/17px Helvetica, Arial, Verdana, sans-serif;
+    height: 550px;
+    margin: 0 auto;
+    position: relative;
+    width: 1000px;
+}
+
+/* Cartas del jugador */
+#jugador1 img {
+    left: 30%;
+    top: 55%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#jugador2 img {
+    left: 42%;
+    top: 55%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#jugador3 img {
+    left: 54%;
+    top: 55%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#jugador4 img {
+    left: 66%;
+    top: 55%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#jugador5 img {
+    left: 78%;
+    top: 55%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+
+/* Cartas de la máquina */
+#maquina1 img {
+    left: 40%;
+    top: 14%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#maquina2 img {
+    left: 52%;
+    top: 14%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#maquina3 img {
+    left: 64%;
+    top: 14%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#maquina4 img {
+    left: 76%;
+    top: 14%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+#maquina5 img {
+    left: 88%;
+    top: 14%;
+    position: absolute;
+    border-radius: 10px;
+    height: 30%;
+}
+
+/* Cuadro de botones */
+#actions {
+    margin: 15px 0 0 0;
+    text-align: center;
+}
+
+/* Cuadro de mensaje */
+#mensaje {
+    border-radius: 5px;
+    border: 2px solid #FFC926;
+    text-align: center;
+    bottom: 220px;
+    height: 150px;
+    padding: 7px;
+    position: absolute;
+    right: 310px;
+    width: 350px;
+    background: #333;
+    opacity: 0.9;
+}
+
+#mensajito {
+    color: #FFF;
+    font: 700 20px Helvetica, Arial, Verdana, sans-serif;
+    position: relative;
+    top: 40px;
+    text-shadow: 1px 1px #000;
+    z-index: 1;
+}
+
+/* Cuadro de información */
+#info {
+    border-radius: 5px;
+    bottom: 0;
+    height: 55px;
+    padding: 7px;
+    position: absolute;
+    right: 0;
+    width: 250px;
+    border: 2px solid #FFC926;
+    background: #333;
+    opacity: 0.9;
+}
+#puntos {
+    color: #FFF;
+    font: 700 18px/20px Helvetica, Arial, Verdana, sans-serif;
+    margin: 12px 0;
+    position: relative;
+    text-shadow: 1px 1px #000;
+    z-index: 1;
+}

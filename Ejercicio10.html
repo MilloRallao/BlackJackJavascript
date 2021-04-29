@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="Ejercicio10.css" />
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <div id="game">
+            <div id="casino">
+            </div>
+            <div id="player">
+            </div>
+            <div id="mensaje" hidden>
+                <span id="mensajito"></span>
+            </div>
+            <div id="info">
+                <span id="puntos">Tienes: </span>
+            </div>
+        </div>
+        <div id="actions">
+            <button id="jugar" class="btn">¡Jugar!</button>
+            <button id="reiniciar" class="btn" disabled>Reiniciar</button>
+            <button id="pedir" class="btn" disabled>Pedir</button>
+            <button id="parar" class="btn" disabled>Plantarse</button>
+        </div>
+    </div>
+
+    <script>
+        var as = "images/as.png";
+        var dos = "images/baraja(2).png";
+        var tres = "images/baraja(3).png";
+        var cuatro = "images/baraja(4).png";
+        var cinco = "images/baraja(5).png";
+        var seis = "images/baraja(6).png";
+        var siete = "images/baraja(7).png";
+        var ocho = "images/baraja(8).png";
+        var nueve = "images/baraja(9).png";
+        var diez = "images/baraja(10).png";
+        var sota = "images/sota.png";
+        var reina = "images/reina.png";
+        var rey = "images/rey.png";
+        var cartaAbajo = "images/baraja_tapada.png"
+        var cartas = [as, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, diez, sota, reina, rey];
+        var contadorCartas;
+        var contadorPlayer;
+        var contadorCasino;
+        var controladorManoCasino = true;
+
+        // Asignación de cartas de la mano inicial para el usuario y el casino
+        $("#jugar").click(function() {
+            contadorCartas = 0;
+            
+            // Primera carta del jugador
+            var random1 = Math.floor((Math.random() * 13));
+            $("#player").append("<div id=jugador1 >");
+            $("#jugador1").append("<img id=" + (random1 + 1) + " src=" + cartas[random1] + " class=carta1 />");
+            contadorCartas++;
+            
+            // Segunda carta del jugador
+            var random2 = Math.floor((Math.random() * 13));
+            $("#player").append("<div id=jugador2 >");
+            $("#jugador2").append("<img id=" + (random2 + 1) + " src=" + cartas[random2] + " class=carta2 />");
+            contadorCartas++;
+
+            // Primera carta del casino
+            var random3 = Math.floor((Math.random() * 13));
+            $("#casino").append("<div id=maquina1 >");
+            $("#maquina1").append("<img id=" + (random3 + 1) + " src=" + cartas[random3] + " class=banca1 />");
+
+            // Segunda carta del casino
+            var random4 = Math.floor((Math.random() * 13));
+            $("#casino").append("<div id=maquina2 >");
+            $("#maquina2").append("<img id=" + (random4 + 1) + " src=" + cartaAbajo + " class=banca2 />");
+
+            $("#jugar").prop("disabled", true);
+            $("#reiniciar").prop("disabled", false);
+            $("#pedir").prop("disabled", false);
+            $("#parar").prop("disabled", false);
+
+            // Primera comprobación inicial
+            comprobar();
+        });
+
+        // Pedir carta
+        $("#pedir").click(function() {
+            contadorCartas++;
+            // Tercera carta y sucesivas del jugador
+            var random1 = Math.floor((Math.random() * 13));
+            $("#player").append("<div id=jugador" + contadorCartas + ">");
+            $("#jugador" + contadorCartas).append("<img id=" + (random1 + 1) + " src=" + cartas[random1] + " class=carta" + contadorCartas + " />");
+            comprobar();
+            // Si el casino tiene menos de 17 puntos, debe pedir siempre carta, en caso contrario, se mantiene con su mano
+            if (contadorCasino < 17) {
+                // Tercera carta y sucesivas del casino
+                var random2 = Math.floor((Math.random() * 13));
+                $("#casino").append("<div id=maquina" + contadorCartas + ">");
+                $("#maquina" + contadorCartas).append("<img id=" + (random2 + 1) + " src=" + cartas[random2] + " class=banca" + contadorCartas + " />");
+                controladorManoCasino = false;
+            }
+            // Comprobación después de cada ronda
+            comprobar();
+        });
+
+        // Comprobar la mano del usuario y el casino
+        function comprobar() {
+            contadorPlayer = 0;
+            contadorCasino = 0;
+
+            //Comprobación cartas jugador
+            var numPlayer = $("#player").children().length;
+            for (var i = 0; i < numPlayer; i++) {
+                var jugador = $(".carta" + (i + 1)).attr("id").match(("\\d*"));
+                switch (parseInt(jugador)) {
+                    case 1:
+                        contadorPlayer += 11;
+                        break;
+                    case 2:
+                        contadorPlayer += 2;
+                        break;
+                    case 3:
+                        contadorPlayer += 3;
+                        break;
+                    case 4:
+                        contadorPlayer += 4;
+                        break;
+                    case 5:
+                        contadorPlayer += 5;
+                        break;
+                    case 6:
+                        contadorPlayer += 6;
+                        break;
+                    case 7:
+                        contadorPlayer += 7;
+                        break;
+                    case 8:
+                        contadorPlayer += 8;
+                        break;
+                    case 9:
+                        contadorPlayer += 9;
+                        break;
+                    case 10:
+                        contadorPlayer += 10;
+                        break;
+                    case 11:
+                        contadorPlayer += 10;
+                        break;
+                    case 12:
+                        contadorPlayer += 10;
+                        break;
+                    case 13:
+                        contadorPlayer += 10;
+                        break;
+                }
+            }
+
+            // Comprobar si el jugador tiene más de 21
+            if (contadorPlayer > 21) {
+                $("#mensajito").text("Te has pasado de 21. ¡HAS PERDIDO!");
+                $("#mensaje").prop("hidden", false);
+                $("#jugar").prop("disabled", true);
+                $("#reiniciar").prop("disabled", false);
+                $("#pedir").prop("disabled", true);
+                $("#parar").prop("disabled", true);
+                return contadorPlayer;
+
+                // Comprobar si el jugador tiene Blackjack
+            } else if (contadorPlayer == 21) {
+                $("#mensajito").text("¡BLACKJACK! !HAS GANADO¡");
+                $("#mensaje").prop("hidden", false);
+                $("#jugar").prop("disabled", true);
+                $("#reiniciar").prop("disabled", false);
+                $("#pedir").prop("disabled", true);
+                $("#parar").prop("disabled", true);
+                return contadorPlayer;
+            // Comprobar que nunca se repartan más de 5 cartas al jugador
+            } else if (contadorCartas == 5) {
+                $("#mensajito").text("Se han repartido 5 cartas. ¡Has ganado!");
+                $("#mensaje").prop("hidden", false);
+                $("#jugar").prop("disabled", true);
+                $("#reiniciar").prop("disabled", false);
+                $("#pedir").prop("disabled", true);
+                $("#parar").prop("disabled", true);
+                return contadorPlayer;
+            }
+
+            // Mostrar los puntos del jugador como información
+            $("#puntos").text("Tienes: " + contadorPlayer);
+            
+            // Controlar que el casino tenga más de las 2 cartas iniciales
+            if (contadorCartas > 2 && controladorManoCasino == false) {
+                // Comprobación cartas casino
+                var numCasino = $("#casino").children().length;
+                for (var i = 0; i < numCasino; i++) {
+                    var maquina = $(".banca" + (i + 1)).attr("id").match(("\\d*"));
+                    switch (parseInt(maquina)) {
+                        case 1:
+                            contadorCasino += 11;
+                            break;
+                        case 2:
+                            contadorCasino += 2;
+                            break;
+                        case 3:
+                            contadorCasino += 3;
+                            break;
+                        case 4:
+                            contadorCasino += 4;
+                            break;
+                        case 5:
+                            contadorCasino += 5;
+                            break;
+                        case 6:
+                            contadorCasino += 6;
+                            break;
+                        case 7:
+                            contadorCasino += 7;
+                            break;
+                        case 8:
+                            contadorCasino += 8;
+                            break;
+                        case 9:
+                            contadorCasino += 9;
+                            break;
+                        case 10:
+                            contadorCasino += 10;
+                            break;
+                        case 11:
+                            contadorCasino += 10;
+                            break;
+                        case 12:
+                            contadorCasino += 10;
+                            break;
+                        case 13:
+                            contadorCasino += 10;
+                            break;
+                    }
+                }
+            // En caso de tener más cartas de las dos iniciales
+            } else {
+                for (var i = 1; i <= 2; i++) {
+                    var maquina = $(".banca" + i).attr("id").match(("\\d*"));
+                    switch (parseInt(maquina)) {
+                        case 1:
+                            contadorCasino += 11;
+                            break;
+                        case 2:
+                            contadorCasino += 2;
+                            break;
+                        case 3:
+                            contadorCasino += 3;
+                            break;
+                        case 4:
+                            contadorCasino += 4;
+                            break;
+                        case 5:
+                            contadorCasino += 5;
+                            break;
+                        case 6:
+                            contadorCasino += 6;
+                            break;
+                        case 7:
+                            contadorCasino += 7;
+                            break;
+                        case 8:
+                            contadorCasino += 8;
+                            break;
+                        case 9:
+                            contadorCasino += 9;
+                            break;
+                        case 10:
+                            contadorCasino += 10;
+                            break;
+                        case 11:
+                            contadorCasino += 10;
+                            break;
+                        case 12:
+                            contadorCasino += 10;
+                            break;
+                        case 13:
+                            contadorCasino += 10;
+                            break;
+                    }
+                }
+            }
+
+
+            // Comprobar si el casino tiene más de 21
+            if (contadorCasino > 21) {
+                $("#mensajito").text("La banca se ha pasado de 21. ¡HAS GANADO!");
+                $("#mensaje").prop("hidden", false);
+                $("#jugar").prop("disabled", true);
+                $("#reiniciar").prop("disabled", false);
+                $("#pedir").prop("disabled", true);
+                $("#parar").prop("disabled", true);
+                return contadorCasino;
+                // Comprobar si el casino tiene Blackjack
+            } else if (contadorCasino == 21) {
+                $("#mensajito").text("¡HAS PERDIDO! La banca ha sacado BlackJack");
+                $("#mensaje").prop("hidden", false);
+                $("#jugar").prop("disabled", true);
+                $("#reiniciar").prop("disabled", false);
+                $("#pedir").prop("disabled", true);
+                $("#parar").prop("disabled", true);
+                return contadorCasino;
+            }
+
+        };
+
+        // Plantarse
+        $("#parar").click(function() {
+            // Si el jugador tiene más puntos que el casino
+            if (contadorPlayer > contadorCasino) {
+                $("#mensajito").text("Tienes: " + contadorPlayer + " y la Banca tiene: " + contadorCasino + ". ¡Enhorabuena, HAS GANADO!");
+                $("#mensaje").prop("hidden", false);
+                // Si el jugador tiene los mimos puntos que el casino
+            } else if (contadorPlayer == contadorCasino) {
+                $("#mensajito").text("Tienes: " + contadorPlayer + " y la Banca tiene: " + contadorCasino + ". ¡EMPATE!");
+                $("#mensaje").prop("hidden", false);
+            // Si el jugador tiene menos puntos que el casino
+            } else {
+                $("#mensajito").text("Tienes: " + contadorPlayer + " y la Banca tiene: " + contadorCasino + ". ¡Lástima, HAS PERDIDO!");
+                $("#mensaje").prop("hidden", false);
+            }
+            $("#jugar").prop("disabled", true);
+            $("#reiniciar").prop("disabled", false);
+            $("#pedir").prop("disabled", true);
+            $("#parar").prop("disabled", true);
+        });
+
+        // Reiniciar juego
+        $("#reiniciar").click(function() {
+            location.reload();
+        });
+
+    </script>
+
+</body>
+
+</html>
